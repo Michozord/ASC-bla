@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include<vector.h>
 #include <matrix.h>
 
 namespace bla = ASC_bla;
@@ -10,13 +10,22 @@ int main()
     size_t n = 5; 
     bla::Matrix<double,bla::ColMajor> a(m, n), c(1, n);
     bla::Matrix<double,bla::ColMajor> b(m, n);
+    bla::Matrix<double, bla::ColMajor> d(n, m);
+    bla::Vector<double> v(n);
 
     int k = 0;
     for (size_t i = 0; i < a.Rows(); i++){
         for (size_t j = 0; j < a.Cols(); j++){
             a(i, j) = k;
             b(i, j) = -k;
+            if (i == 0) { v(j) = k; }
             k++;
+            
+        }
+    }
+    for (size_t i = 0; i < d.Rows(); i++) {
+        for (size_t j = 0; j < d.Cols(); j++) {
+            d(i, j) = i+j;
         }
     }
 
@@ -29,6 +38,14 @@ int main()
     std::cout << "a + b = " << c << std::endl;
     c = b.transpose();
     std::cout << "b^T = " << c << std::endl;
+
+    //test matrix-matrix-product
+    std::cout << "d = " << d << std::endl;
+    std::cout << "a*d =" << '\n' << a * d << '\n';
+
+    //test matrix-vector-product
+    std::cout << "v = " << v << '\n' << std::endl;
+    std::cout << "a*v = " << '\n' << a * v << std::endl;
 
     //Invalid matrix operations to test assertion tests:
 

@@ -5,7 +5,10 @@
 #include <assert.h>
 
 namespace ASC_bla
-{
+{   //forward declaration of Vector class
+    template <typename T>
+    class Vector;
+
   enum ORDERING { ColMajor, RowMajor };
   template <typename T, ORDERING ORD>
   class Matrix
@@ -55,7 +58,7 @@ namespace ASC_bla
         }
         return *this;
     }
-
+    //why can we not just switch like in move constructor?
     Matrix & operator= (Matrix && m2){
         rows_ = m2.Rows();
         cols_ = m2.Cols();
@@ -127,12 +130,46 @@ namespace ASC_bla
     assert(a.Cols() == b.Cols() && a.Rows() == b.Rows());
     Matrix<T, ORD1> sum(a.Rows(), a.Cols());
     for (size_t i = 0; i < a.Rows(); i++){
-        for(size_t j = 0; j < a.Cols() - 1; j++){
+        for(size_t j = 0; j < a.Cols(); j++){   //fixed error
             sum(i, j) = a(i, j) + b(i, j);
         }
     }
     return sum;
   }
+
+
+  //Added Matrix-Matrix Product and Matrix-Vector Product
+  template <typename T, ORDERING ORD1, ORDERING ORD2>
+  Matrix<T, ORD1> operator* (const Matrix<T, ORD1>& a, const Matrix<T, ORD2>& b)
+  {
+      assert(a.Cols() == b.Rows());
+      Matrix<T, ORD1> c(a.Rows(), b.Cols());
+      for (size_t i = 0; i < a.Rows(); ++i) {
+          for (size_t j = 0; j < b.Cols(); ++j) {
+              c(i, j) = 0;
+              for (size_t k = 0; k < a.Cols(); k++) {
+                  c(i, j) += a(i, k) * b(k, j);
+              }
+          }
+      }
+      return c;
+  }
+
+  //decided to return matrix to avoid loss of "ordering" information/better printing
+  template <typename T, ORDERING ORD1>
+  Matrix<T, ORD1> operator* (const Matrix<T, ORD1>& a, const Vector<T>& b)
+  {
+      assert(a.Cols() == b.Size());
+      Matrix<T, ORD1> c(a.Rows(), 1);
+      for (size_t i = 0; i < a.Rows(); ++i) {
+          c(i, 0) = 0;
+          for (size_t k = 0; k < a.Cols(); k++) {
+                  c(i, 0) += a(i, k) * b(k);
+          }
+      }
+      return c;
+  }
+
 
 }
 

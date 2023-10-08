@@ -2,6 +2,7 @@
 #define FILE_MATRIX_H
 
 #include <iostream>
+#include <assert.h>
 
 namespace ASC_bla
 {
@@ -78,8 +79,9 @@ namespace ASC_bla
     
     size_t Rows() const { return rows_; }
     size_t Cols() const { return cols_; }
-    
+
     T & operator()(size_t i, size_t j) { 
+        assert(0 <= i && i < Rows() && 0 <= j && j < Cols());
         if (ORD == ORDERING::ColMajor){
             return data_[j * Rows() + i];
         } else {
@@ -87,6 +89,7 @@ namespace ASC_bla
         }
     }
     const T & operator()(size_t i, size_t j) const {
+        assert(0 <= i && i < Rows() && 0 <= j && j < Cols());
         if (ORD == ORDERING::ColMajor){
             return data_[j * Rows() + i];
         } else { 
@@ -121,6 +124,7 @@ namespace ASC_bla
   template <typename T, ORDERING ORD1, ORDERING ORD2>
   Matrix<T, ORD1> operator+ (const Matrix<T, ORD1> & a, const Matrix<T, ORD2> & b)
   {
+    assert(a.Cols() == b.Cols() && a.Rows() == b.Rows());
     Matrix<T, ORD1> sum(a.Rows(), a.Cols());
     for (size_t i = 0; i < a.Rows(); i++){
         for(size_t j = 0; j < a.Cols() - 1; j++){

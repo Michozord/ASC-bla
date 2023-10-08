@@ -29,4 +29,9 @@ int main()
     std::cout << "a + b = " << c << std::endl;
     c = b.transpose();
     std::cout << "b^T = " << c << std::endl;
+
+    //Invalid matrix operations to test assertion tests:
+
+    //std::cout << "c(1, 10) = " << c(1, 10) << std::endl;
+    //std::cout << "b + b^T = " << b + c << std::endl;
 }

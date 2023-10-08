@@ -37,6 +37,8 @@ namespace ASC_bla
     Matrix & operator=(const Matrix & m2){
         rows_ = m2.Rows();
         cols_ = m2.Cols();
+        delete data_;
+        data_= new T[rows_ * cols_ ];
         if (ORD == ORDERING::ColMajor){
             for(size_t i = 0; i < m2.Rows(); i++){
                 for(size_t j = 0; j< m2.Cols(); j++){
@@ -56,6 +58,8 @@ namespace ASC_bla
     Matrix & operator= (Matrix && m2){
         rows_ = m2.Rows();
         cols_ = m2.Cols();
+        delete data_;
+        data_= new T[rows_ * cols_ ];
         if (ORD == ORDERING::ColMajor){
             for(size_t i = 0; i < m2.Rows(); i++){
                 for(size_t j = 0; j< m2.Cols(); j++){
@@ -74,6 +78,7 @@ namespace ASC_bla
     
     size_t Rows() const { return rows_; }
     size_t Cols() const { return cols_; }
+    
     T & operator()(size_t i, size_t j) { 
         if (ORD == ORDERING::ColMajor){
             return data_[j * Rows() + i];

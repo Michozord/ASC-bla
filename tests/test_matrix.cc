@@ -8,7 +8,7 @@ int main()
 {
     size_t m = 3;
     size_t n = 5; 
-    bla::Matrix<double,bla::ColMajor> a(m, n), c(m, n);
+    bla::Matrix<double,bla::ColMajor> a(m, n), c(1, n);
     bla::Matrix<double,bla::ColMajor> b(m, n);
 
     int k = 0;

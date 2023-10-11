@@ -109,6 +109,49 @@ namespace ASC_bla
         }
         return res;
     }
+
+    //replaces m-th row in the matrix with the linear combination of n-th row (times c1) and m-th row (times c2)
+    void combineRows(size_t n, size_t m, T c1=1, T c2=1) {
+        for (size_t i = 0; i < this->Cols(); ++i) {
+            (*this)(m, i) = c1 * (*this)(n, i) + c2 * (*this)(m, i);
+        }
+    }
+    
+    void swapRows(size_t n, size_t m) {
+        for (size_t i = 0; i < this->Cols(); ++i) {
+            std::swap((*this)(m, i), (*this)(n, i));
+        }
+    }
+    
+
+    Matrix<T, ORD> invert() {
+        assert(this->Rows() == this->Cols());
+        size_t n = this->Rows();
+        Matrix < T, ORD > I = identity<T, ORD>(n);
+        Matrix<T, ORD> M(*this);
+
+        for (size_t i = 0; i < n; ++i) 
+        {
+            if (M(i, i) == 0) {
+                size_t p = i+1;
+                while (M(p, i) == 0) {
+                    ++p;
+                }
+                I.swapRows(i, p);
+                M.swapRows(i, p);
+            }
+            I.combineRows(i, i, 1 / M(i, i), 0);
+            M.combineRows(i, i, 1 / M(i, i), 0);
+            for (size_t k = 0; k < n; ++k) 
+            { 
+                if (k != i) {
+                    I.combineRows(i, k, -M(k, i), 1); 
+                    M.combineRows(i, k, -M(k, i), 1);
+                } 
+            }
+        }
+        return I;
+    }
   };
 
 
@@ -137,6 +180,17 @@ namespace ASC_bla
     return sum;
   }
 
+  //identitiy matrix
+  template <typename T, ORDERING ORD>
+  Matrix<T, ORD> identity(size_t n) {
+      Matrix<T, ORD> a(n, n);
+      for (size_t i = 0; i < n; i++) {
+          for (size_t j = 0; j < n; j++) {   //fixed error
+              a(i,j)=(i==j);
+          }
+      }
+      return a;
+  }
 
   //Added Matrix-Matrix Product and Matrix-Vector Product
   template <typename T, ORDERING ORD1, ORDERING ORD2>

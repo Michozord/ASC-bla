@@ -32,20 +32,26 @@ namespace ASC_bla
             }
       }
     
-    // template <typename TB>
-    // MatrixView & operator= (const MatExpr<TB> & m2)
-    // {
-    //   for (size_t i = 0; i < size_; i++)
-    //     data_[dist_*i] = v2(i);
-    //   return *this;
-    // }
+    template <typename TB>
+    MatrixView & operator= (const MatExpr<TB> & m2)
+    {
+      for (size_t i = 0; i < Height(); i++){
+        for (size_t j = 0; j < Width(); j++){
+            (*this)(i, j) = m2(i, j);
+        }
+      } 
+      return *this;
+    }
 
-    // MatrixView & operator= (T scal)
-    // {
-    //   for (size_t i = 0; i < size_; i++)
-    //     data_[dist_*i] = scal;
-    //   return *this;
-    // }
+    MatrixView & operator= (T scal)
+    {
+      for (size_t i = 0; i < Height(); i++){
+        for (size_t j = 0; j < Width(); j++){
+            (*this)(i, j) = scal;
+        }
+      } 
+      return *this;
+    }
     
     auto View() const { return MatrixView(height_, width_, dist_, data_); }
     size_t Height() const { return height_; }

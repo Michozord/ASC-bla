@@ -125,8 +125,30 @@ namespace ASC_bla
     return MatMatExpr(a.Upcast(), b.Upcast());
   }
 
-  // MatVecExpr to do 
+  template <typename TMAT, typename TVEC>
+  class MatVecExpr : public VecExpr<MatVecExpr<TMAT,TVEC>>
+  {
+    TVEC vec_;
+    TMAT mat_;
+  public:
+    MatVecExpr (TMAT mat, TVEC vec) : vec_(vec), mat_(mat) { }
 
+    auto operator() (size_t i) const { 
+      assert(vec_.Size() == mat_.Width());
+      decltype(vec_(0)) res = 0;
+      for(size_t k = 0; k<vec_.Size(); k++){
+        res += mat_(i, k) * vec_(k);
+      }
+      return res;
+    }
+    size_t Size() const { return mat_.Height(); } 
+  };
+  
+  template <typename TA, typename TB> 
+  auto operator* (const MatExpr<TA> & m, const VecExpr<TB> & v)
+  {
+    return MatVecExpr(m.Upcast(), v.Upcast());
+  }
 
   
   template <typename TSCAL, typename TM>

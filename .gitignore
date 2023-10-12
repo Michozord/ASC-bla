@@ -4,3 +4,10 @@
 
 /out/build/x64-Debug
 /.vs
+*.json
+*.exe
+*.cmake
+*.make
+*.bin
+*.txt
+*.a

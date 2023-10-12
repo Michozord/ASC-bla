@@ -12,5 +12,4 @@
 *.cmake
 *.make
 *.bin
-*.txt
 *.a

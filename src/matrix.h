@@ -26,9 +26,9 @@ namespace ASC_bla
     MatrixView (size_t height, size_t width, T * data)
       : data_(data), height_(height), width_(width) { 
             if (ORD == ORDERING::ColMajor){
-                dist = height;
+                dist_ = height;
             }else{
-                dist = width;
+                dist_ = width;
             }
       }
     
@@ -58,7 +58,7 @@ namespace ASC_bla
             return data_[i * dist_ + j];
         } 
      }
-    const T & operator()(size_t i) const { 
+    const T & operator()(size_t i, size_t j) const { 
         assert(0 <= i && i < Height() && 0 <= j && j < Width());
         if (ORD == ORDERING::ColMajor){
             return data_[j * dist_ + i];
@@ -192,34 +192,34 @@ namespace ASC_bla
     }
     
 
-    Matrix<T, ORD> invert() {
-        assert(this->Rows() == this->Cols());
-        size_t n = this->Rows();
-        Matrix < T, ORD > I = identity<T, ORD>(n);
-        Matrix<T, ORD> M(*this);
+    // Matrix<T, ORD> invert() {
+    //     assert(this->Rows() == this->Cols());
+    //     size_t n = this->Rows();
+    //     Matrix < T, ORD > I = identity<T, ORD>(n);
+    //     Matrix<T, ORD> M(*this);
 
-        for (size_t i = 0; i < n; ++i) 
-        {
-            if (M(i, i) == 0) {
-                size_t p = i+1;
-                while (M(p, i) == 0) {
-                    ++p;
-                }
-                I.swapRows(i, p);
-                M.swapRows(i, p);
-            }
-            I.combineRows(i, i, 1 / M(i, i), 0);
-            M.combineRows(i, i, 1 / M(i, i), 0);
-            for (size_t k = 0; k < n; ++k) 
-            { 
-                if (k != i) {
-                    I.combineRows(i, k, -M(k, i), 1); 
-                    M.combineRows(i, k, -M(k, i), 1);
-                } 
-            }
-        }
-        return I;
-    }
+    //     for (size_t i = 0; i < n; ++i) 
+    //     {
+    //         if (M(i, i) == 0) {
+    //             size_t p = i+1;
+    //             while (M(p, i) == 0) {
+    //                 ++p;
+    //             }
+    //             I.swapRows(i, p);
+    //             M.swapRows(i, p);
+    //         }
+    //         I.combineRows(i, i, 1 / M(i, i), 0);
+    //         M.combineRows(i, i, 1 / M(i, i), 0);
+    //         for (size_t k = 0; k < n; ++k) 
+    //         { 
+    //             if (k != i) {
+    //                 I.combineRows(i, k, -M(k, i), 1); 
+    //                 M.combineRows(i, k, -M(k, i), 1);
+    //             } 
+    //         }
+    //     }
+    //     return I;
+    // }
   };
 
 

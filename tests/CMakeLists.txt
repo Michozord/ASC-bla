@@ -1,1 +1,1 @@
-add_executable (test_vector test_vector.cc)
+add_executable (test_matrix_2.cc)

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <assert.h>
+#include "expression.h"
+#include "vector.h"
 
 namespace ASC_bla
 {   //forward declaration of Vector class
@@ -10,6 +12,72 @@ namespace ASC_bla
     class Vector;
 
   enum ORDERING { ColMajor, RowMajor };
+
+  template <typename T, ORDERING ORD> 
+  class MatrixView : public MatExpr<MatrixView<T, ORD>>
+  {
+  protected:
+    size_t height_, width_, dist_;
+    T * data_;
+  public:
+    MatrixView (size_t height, size_t width, size_t dist, T * data)
+      : data_(data), height_(height), width_(width), dist_(dist) { }
+    
+    MatrixView (size_t height, size_t width, T * data)
+      : data_(data), height_(height), width_(width) { 
+            if (ORD == ORDERING::ColMajor){
+                dist = height;
+            }else{
+                dist = width;
+            }
+      }
+    
+    // template <typename TB>
+    // MatrixView & operator= (const MatExpr<TB> & m2)
+    // {
+    //   for (size_t i = 0; i < size_; i++)
+    //     data_[dist_*i] = v2(i);
+    //   return *this;
+    // }
+
+    // MatrixView & operator= (T scal)
+    // {
+    //   for (size_t i = 0; i < size_; i++)
+    //     data_[dist_*i] = scal;
+    //   return *this;
+    // }
+    
+    auto View() const { return MatrixView(height_, width_, dist_, data_); }
+    size_t Height() const { return height_; }
+    size_t Width() const { return width_; }
+    T & operator()(size_t i, size_t j) { 
+        assert(0 <= i && i < Height() && 0 <= j && j < Width());
+        if (ORD == ORDERING::ColMajor){
+            return data_[j * dist_ + i];
+        } else {
+            return data_[i * dist_ + j];
+        } 
+     }
+    const T & operator()(size_t i) const { 
+        assert(0 <= i && i < Height() && 0 <= j && j < Width());
+        if (ORD == ORDERING::ColMajor){
+            return data_[j * dist_ + i];
+        } else {
+            return data_[i * dist_ + j];
+        } 
+     }
+    
+    // auto Range(size_t first, size_t next) const {
+    //   return VectorView(next-first, dist_, data_+first*dist_);
+    // }
+
+    // auto Slice(size_t first, size_t slice) const {
+    //   return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
+    // }
+      
+  };
+
+
   template <typename T, ORDERING ORD>
   class Matrix
   {

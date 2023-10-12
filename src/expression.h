@@ -65,6 +65,104 @@ namespace ASC_bla
       ost << ", " << v(i);
     return ost;
   }
+
+
+  template <typename T>
+  class MatExpr
+  {
+  public:
+    auto Upcast() const { return static_cast<const T&> (*this); }
+    size_t Height() const { return Upcast().Height(); }
+    size_t Width() const { return Upcast().Width(); }
+    auto operator() (size_t i, size_t j) const { return Upcast()(i, j); }
+  };
+  
+ 
+  template <typename TA, typename TB>
+  class SumMatExpr : public MatExpr<SumMatExpr<TA,TB>>
+  {
+    TA a_;
+    TB b_;
+  public:
+    SumMatExpr (TA a, TB b) : a_(a), b_(b) { }
+
+    auto operator() (size_t i, size_t j) const { return a_(i, j)+b_(i, j); }
+    size_t Height() const { return a_.Height(); }      
+    size_t Width() const { return a_.Width(); }      
+
+  };
+  
+  template <typename TA, typename TB>
+  auto operator+ (const MatExpr<TA> & a, const MatExpr<TB> & b)
+  {
+    return SumMatExpr(a.Upcast(), b.Upcast());
+  }
+
+  template <typename TA, typename TB>
+  class MatMatExpr : public MatExpr<MatMatExpr<TA,TB>>
+  {
+    TA a_;
+    TB b_;
+  public:
+    MatMatExpr (TA a, TB b) : a_(a), b_(b) { }
+
+    auto operator() (size_t i, size_t j) const {
+      assert(a_.Width() == b_.Height());
+      decltype(a_(0,0)) res = 0;
+      for (size_t k = 0; k < a_.Width(); k++) {
+          res += a_(i, k) * b_(k, j);
+      }
+      return res;
+     }
+    size_t Height() const { return a_.Height(); }      
+    size_t Width() const { return b_.Width(); }      
+
+  };
+  
+  template <typename TA, typename TB>
+  auto operator* (const MatExpr<TA> & a, const MatExpr<TB> & b)
+  {
+    return MatMatExpr(a.Upcast(), b.Upcast());
+  }
+
+  // MatVecExpr to do 
+
+
+  
+  template <typename TSCAL, typename TM>
+  class ScaleMatExpr : public MatExpr<ScaleMatExpr<TSCAL,TM>>
+  {
+    TSCAL scal_;
+    TM mat_;
+  public:
+    ScaleMatExpr (TSCAL scal, TM mat) : scal_(scal), mat_(mat) { }
+
+    auto operator() (size_t i, size_t j) const { return scal_*mat_(i, j); }
+    size_t Width() const { return mat_.Width(); }
+    size_t Height() const { return mat_.Height(); }     
+  };
+  
+  template <typename T> 
+  auto operator* (double scal, const MatExpr<T> & m)
+  {
+    return ScaleMatExpr(scal, m.Upcast());
+  }
+
+  
+
+
+
+  template <typename T>
+  std::ostream & operator<< (std::ostream & ost, const MatExpr<T> & m)
+  {
+    for (size_t i = 0; i < m.Height(); i++){
+        for(size_t j = 0; j < m.Width() - 1; j++){
+            ost << m(i, j) << ", ";
+        }
+        ost << m(i, m.Width() - 1) << "\n";
+    }
+    return ost;
+  }
   
 }
  

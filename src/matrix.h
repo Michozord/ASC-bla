@@ -72,14 +72,6 @@ namespace ASC_bla
             return data_[i * dist_ + j];
         } 
      }
-    
-    // auto Range(size_t first, size_t next) const {
-    //   return VectorView(next-first, dist_, data_+first*dist_);
-    // }
-
-    // auto Slice(size_t first, size_t slice) const {
-    //   return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
-    // }
       
   };
 
@@ -119,6 +111,9 @@ namespace ASC_bla
     
     ~Matrix () { delete [] data_; }
 
+    size_t Height() const { return height_; }
+    size_t Width() const { return width_; }
+
     using BASE::operator=;
     Matrix & operator=(const Matrix & m2)
     {
@@ -140,6 +135,24 @@ namespace ASC_bla
         return *this;
     }
     
+    VectorView<T> Row (size_t i) const {
+        assert(0 <= i && i < Height());
+        T * data = new T[Width()];
+        for(size_t j = 0; j < Width(); j++){
+            data[j] = (*this)(i, j);
+        }
+        return VectorView<T>(Width(), data);
+    }
+
+    VectorView<T> Col (size_t j) const {
+        assert(0 <= j && j < Width());
+        T * data = new T[Height()];
+        for(size_t i = 0; i < Height(); i++){
+            data[i] = (*this)(i, j);
+        }
+        return VectorView<T>(Height(), data);
+    }
+
   };
 
 

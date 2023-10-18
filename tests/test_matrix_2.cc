@@ -36,6 +36,8 @@ int main()
     std::cout << "d = " << d << std::endl;
     std::cout << "v = " << v << std::endl;
     std::cout << "a * v = " << a*v << std::endl;
+    std::cout << "a.Row(1) = " << a.Row(1) << std::endl;
+    std::cout << "a.Col(3) = " << a.Col(3) << std::endl;
 
     
 }

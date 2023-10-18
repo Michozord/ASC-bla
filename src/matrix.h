@@ -83,6 +83,7 @@ namespace ASC_bla
     using BASE::height_;
     using BASE::width_;
     using BASE::data_;
+    using BASE::dist_;
   public:
     Matrix (size_t height, size_t width) 
       : MatrixView<T, ORD> (height, width, new T[height * width]) { ; }
@@ -137,20 +138,45 @@ namespace ASC_bla
     
     VectorView<T> Row (size_t i) const {
         assert(0 <= i && i < Height());
-        T * data = new T[Width()];
-        for(size_t j = 0; j < Width(); j++){
-            data[j] = (*this)(i, j);
+        if(ORD == ORDERING::RowMajor){
+            return VectorView<T>(Width(), data_ + i*Width());
+        }else{
+            //return VectorView<T>(Width(), Height(), data_ + i);   // this is correct command, but raises error 
+            return VectorView<T>(Width(), data_ + i*Width());       // this is only placeholder to return something!
         }
-        return VectorView<T>(Width(), data);
+        
     }
 
     VectorView<T> Col (size_t j) const {
         assert(0 <= j && j < Width());
-        T * data = new T[Height()];
-        for(size_t i = 0; i < Height(); i++){
-            data[i] = (*this)(i, j);
+        if(ORD == ORDERING::ColMajor){
+            return VectorView<T>(Height(), data_ + j*Height());
+        }else{
+            //return VectorView<T>(Height(), Width(), data_ + j);   // this is correct command, but raises error 
+            return VectorView<T>(Height(), data_ + j*Height());     // this is only placeholder to return something!
         }
-        return VectorView<T>(Height(), data);
+    }
+
+    MatrixView<T, ORD> Rows (size_t first, size_t next) const {
+        assert(0 <= first && first < Height());
+        assert(0 < next && next <= Height());
+        assert(first < next);
+        if(ORD == ORDERING::RowMajor){
+            return MatrixView<T, ORD>(next-first, Width(), dist_, data_+first*Width());
+        } else {
+            return MatrixView<T, ORD>(next-first, Width(), Height(), data_+first);
+        }
+    }
+
+    MatrixView<T, ORD> Cols (size_t first, size_t next) const {
+        assert(0 <= first && first < Width());
+        assert(0 < next && next <= Width());
+        assert(first < next);
+        if(ORD == ORDERING::ColMajor){
+            return MatrixView<T, ORD>(Height(), next-first, dist_, data_+first*Height());
+        } else {
+            return MatrixView<T, ORD>(Height(), next-first, Width(), data_+first);
+        }
     }
 
   };

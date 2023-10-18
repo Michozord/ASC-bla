@@ -17,7 +17,7 @@ int main()
     for (size_t i = 0; i < a.Height(); i++){
         for (size_t j = 0; j < a.Width(); j++){
             a(i, j) = 0;
-            b(i, j) = k;
+            b(j, i) = k;
             if (i == 0) { v(j) = k; }
             k++;
             
@@ -36,8 +36,10 @@ int main()
     std::cout << "d = " << d << std::endl;
     std::cout << "v = " << v << std::endl;
     std::cout << "a * v = " << a*v << std::endl;
-    std::cout << "a.Row(1) = " << a.Row(1) << std::endl;
-    std::cout << "a.Col(3) = " << a.Col(3) << std::endl;
+    std::cout << "b.Row(1) = " << b.Row(1) << std::endl;
+    std::cout << "b.Col(3) = " << b.Col(3) << std::endl;
+    std::cout << "b.Cols(1, 4) = " << b.Cols(1, 4) << std::endl;
+    std::cout << "b.Rows(1, 4) = " << b.Rows(1, 4) << std::endl;
 
     
 }

@@ -173,10 +173,18 @@ namespace ASC_bla
         assert(0 < next && next <= Width());
         assert(first < next);
         if(ORD == ORDERING::ColMajor){
-            return MatrixView<T, ORD>(Height(), next-first, dist_, data_+first*Height());
+          return MatrixView<T, ORD>(Height(), next-first, dist_, data_+first*Height());
         } else {
-            return MatrixView<T, ORD>(Height(), next-first, Width(), data_+first);
+          return MatrixView<T, ORD>(Height(), next-first, Width(), data_+first);
         }
+    }
+
+    auto Transpose () const{
+      if constexpr(ORD==ORDERING::ColMajor){
+        return MatrixView<T, ASC_bla::RowMajor>(Width(), Height(), data_);
+      }else{
+        return MatrixView<T, ASC_bla::ColMajor>(Width(), Height(), data_);
+      }
     }
 
   };

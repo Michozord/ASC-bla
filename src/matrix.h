@@ -136,24 +136,22 @@ namespace ASC_bla
         return *this;
     }
     
-    VectorView<T> Row (size_t i) const {
+    auto Row (size_t i) const {
         assert(0 <= i && i < Height());
-        if(ORD == ORDERING::RowMajor){
+        if constexpr (ORD == ORDERING::RowMajor){
             return VectorView<T>(Width(), data_ + i*Width());
         }else{
-            //return VectorView<T>(Width(), Height(), data_ + i);   // this is correct command, but raises error 
-            return VectorView<T>(Width(), data_ + i*Width());       // this is only placeholder to return something!
+            return VectorView<T, size_t>(Width(), Height(), data_ + i); 
         }
         
     }
 
-    VectorView<T> Col (size_t j) const {
+    auto Col (size_t j) const {
         assert(0 <= j && j < Width());
-        if(ORD == ORDERING::ColMajor){
+        if constexpr (ORD == ORDERING::ColMajor){
             return VectorView<T>(Height(), data_ + j*Height());
         }else{
-            //return VectorView<T>(Height(), Width(), data_ + j);   // this is correct command, but raises error 
-            return VectorView<T>(Height(), data_ + j*Height());     // this is only placeholder to return something!
+            return VectorView<T>(Height(), Width(), data_ + j);
         }
     }
 

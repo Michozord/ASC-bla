@@ -37,9 +37,7 @@ int main()
     std::cout << "b = " << b << std::endl;
     std::cout << "a*b = " << a*b << std::endl;
     std::cout << "a+b = " << a+b << std::endl;
-    d = a;
-    d = 0.5 * d;
-    std::cout << "d = " << d << std::endl;
+
     std::cout << "v = " << v << std::endl;
     std::cout << "a * v = " << a*v << std::endl;
     std::cout << "b.Row(1) = " << b.Row(1) << std::endl;
@@ -47,7 +45,7 @@ int main()
     std::cout << "b.Cols(1, 4) = " << b.Cols(1, 4) << std::endl;
     std::cout << "b.Rows(1, 4) = " << b.Rows(1, 4) << std::endl;
     std::cout << "b.Rows(1, 4) = " << b.Rows(1, 4) << std::endl;
-    std::cout << "d = " << d << std::endl;
+
     std::cout << "d.Transpose()" << d.Transpose() << std::endl;
     
 }

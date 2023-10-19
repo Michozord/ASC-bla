@@ -27,7 +27,7 @@ int main()
     a(1,2) = 1;
     a(2,1) = 1;
     a(3,3) = 1;
-    std::cout << "a = " << a << std::endl;
+    std::cout << "a = \n" << a << std::endl;
     std::cout << "b = " << b << std::endl;
     std::cout << "a*b = " << a*b << std::endl;
     std::cout << "a+b = " << a+b << std::endl;

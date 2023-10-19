@@ -109,7 +109,8 @@ namespace ASC_bla
 
     auto operator() (size_t i, size_t j) const {
       assert(a_.Width() == b_.Height());
-      typename res = 0;
+      auto res = a_(0, 0);
+      res = 0;
       for (size_t k = 0; k < a_.Width(); k++) {
           res += a_(i, k) * b_(k, j);
       }
@@ -136,7 +137,8 @@ namespace ASC_bla
 
     auto operator() (size_t i) const { 
       assert(vec_.Size() == mat_.Width());
-      typename res = 0;
+      auto res = vec_(0);
+      res = 0;
       for(size_t k = 0; k<vec_.Size(); k++){
         res += mat_(i, k) * vec_(k);
       }

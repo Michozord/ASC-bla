@@ -13,3 +13,5 @@
 *.make
 *.bin
 *.a
+build/
+idea/

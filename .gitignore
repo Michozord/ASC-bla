@@ -4,9 +4,9 @@
 
 /out/build/x64-Debug
 /.vs
-/build/CMakeFiles/
-/build/.cmake/
-/build/Makefile
+build/CMakeFiles/
+build/.cmake/
+build/Makefile
 *.json
 *.exe
 *.cmake
@@ -15,3 +15,4 @@
 *.a
 build/
 .idea/
+

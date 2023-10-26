@@ -80,7 +80,7 @@ PYBIND11_MODULE(bla, m) {
            return self.Width();
       })
 
-      //setters ans getters
+      //setters and getters
       .def("__setitem__", [](Matrix<double,RowMajor> & self, std::tuple<int, int> ind , double v) {
         if (std::get<0>(ind) < 0 || std::get<1>(ind) < 0) throw py::index_error("matrix index out of range");
         self(std::get<0>(ind),std::get<1>(ind)) = v;
@@ -97,7 +97,36 @@ PYBIND11_MODULE(bla, m) {
 
       //basic operators
       .def("__add__", [](Matrix<double, RowMajor> & self, Matrix<double, RowMajor> & other)
-      { return Matrix<double,RowMajor> (self+other); })
+      { 
+        if (self.Height()!=other.Height() || self.Width()!=other.Width()) throw py::index_error("Matrix dimension not the same, addition impossible");
+        return Matrix<double,RowMajor> (self+other); 
+      })
+
+      .def("__sub__", [](Matrix<double, RowMajor> & self, Matrix<double, RowMajor> & other)
+      { 
+        if (self.Height()!=other.Height() || self.Width()!=other.Width()) throw py::index_error("Matrix dimension not the same, subtraction impossible");
+        return Matrix<double,RowMajor> (self+(-1)*other); 
+      })
+
+      //scalar multiplication
+      .def("__rmul__", [](Matrix<double, RowMajor> & self, double scal)
+      { return Matrix<double, RowMajor> (scal*self); })
+
+      //matrix multiplication
+      .def("__mul__", [](Matrix<double, RowMajor> & self,Matrix<double, RowMajor> & other )
+      {
+        if (self.Width()!=other.Height()) throw py::index_error("dimension do not fit matrix-multiplication");
+        return Matrix<double,RowMajor>(self*other);
+        })  
+      
+      //matrix-vector multiplication
+      .def("__mul__", [](Matrix<double, RowMajor> & self,Vector<double> & other )
+      {
+        if (self.Width()!=other.Size()) throw py::index_error("dimension do not fit mat-vec-multiplication");
+        return Vector<double>(self*other);
+        })  
+
+      
 
     ;
     

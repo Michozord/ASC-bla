@@ -2,3 +2,4 @@ _skbuild/
 ASCsoft.egg-info/
 build/
 setup.py
+.vscode/settings.json

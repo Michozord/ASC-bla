@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 
 #include "vector.h"
+#include "matrix.h"
 
 using namespace ASC_bla;
 namespace py = pybind11;
@@ -62,4 +63,42 @@ PYBIND11_MODULE(bla, m) {
           return v;
         }))
     ;
+
+    //Matrix binding
+    py::class_<Matrix<double,ASC_bla::RowMajor>> (m, "Matrix")
+      .def(py::init<size_t,size_t>(),
+           py::arg("height"), py::arg("width"))
+      
+      //basic properties
+      .def_property_readonly("shape",[](const Matrix<double, RowMajor>& self) {
+           return std::tuple(self.Height(), self.Width());
+      })
+      .def_property_readonly("height",[](const Matrix<double, RowMajor>& self) {
+           return self.Height();
+      })
+      .def_property_readonly("width",[](const Matrix<double, RowMajor>& self) {
+           return self.Width();
+      })
+
+      //setters ans getters
+      .def("__setitem__", [](Matrix<double,RowMajor> & self, std::tuple<int, int> ind , double v) {
+        if (std::get<0>(ind) < 0 || std::get<1>(ind) < 0) throw py::index_error("matrix index out of range");
+        self(std::get<0>(ind),std::get<1>(ind)) = v;
+      })
+      .def("__getitem__", [](Matrix<double,RowMajor> & self, std::tuple<int, int> ind) { return self(std::get<0>(ind),std::get<1>(ind)); })
+      
+      //printing
+      .def("__str__", [](const Matrix<double,RowMajor> & self)
+      {
+        std::stringstream str; 
+        str << self;
+        return str.str();
+      })
+
+      //basic operators
+      .def("__add__", [](Matrix<double, RowMajor> & self, Matrix<double, RowMajor> & other)
+      { return Matrix<double,RowMajor> (self+other); })
+
+    ;
+    
 }

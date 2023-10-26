@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "expression.h"
 #include "vector.h"
+#include <utility>
 
 namespace ASC_bla
 {   //forward declaration of Vector class
@@ -95,10 +96,11 @@ namespace ASC_bla
     }
 
     Matrix (Matrix && m)
-      : MatrixView<T, ORD> (0, nullptr)
+      : MatrixView<T, ORD> (0, 0, 0, nullptr)  //fixed error
     {
       std::swap(height_, m.height_);
       std::swap(width_, m.width_);
+      std::swap(dist_, m.dist_);              //added this, otherwise error    
       std::swap(data_, m.data_);
     }
 
@@ -117,7 +119,7 @@ namespace ASC_bla
 
     using BASE::operator=;
     Matrix & operator=(const Matrix & m2)
-    {
+    {   assert(width_==m2.width_ && height_==m2.height_);   //solve this later in a better manner!
         for (size_t i = 0; i < m2.Height(); i++){
             for (size_t j = 0; j < m2.Width(); j++){
                 (*this)(i, j) = m2(i, j);
@@ -126,14 +128,24 @@ namespace ASC_bla
         return *this;
     }
 
+
+    // move assignment rewritten
     Matrix & operator= (Matrix && m2)
     {
-        for (size_t i = 0; i < m2.Height(); i++){
-            for (size_t j = 0; j < m2.Width(); j++){
-                (*this)(i, j) = m2(i, j);
-            }
-        } 
-        return *this;
+      //check self-assignment
+      if(&m2 == this) return *this;     
+
+      //get resources from m2
+      std::swap(height_, m2.height_);
+      std::swap(width_, m2.width_);
+      std::swap(dist_, m2.dist_); 
+
+      //delete data_ and leave m2 in destructable state
+      delete[] data_;
+      data_=m2.data_;
+      m2.data_=nullptr;
+      
+      return *this;
     }
     
     auto Row (size_t i) const {
@@ -183,6 +195,46 @@ namespace ASC_bla
       }else{
         return MatrixView<T, ASC_bla::ColMajor>(Width(), Height(), data_);
       }
+    }
+
+    void swapRows(size_t n, size_t m) {
+        for (size_t i = 0; i < width_; ++i) {
+            std::swap((*this)(m, i), (*this)(n, i));
+        }
+    }
+
+    Matrix<T, ORD> invert() 
+    {
+      assert(height_ == width_);
+      size_t n = height_;
+      Matrix<T, ORD> I(height_, width_);
+      for (size_t i = 0; i < n; i++) {
+          for (size_t j = 0; j < n; j++) {   
+              I(i,j)=(i==j);
+          }
+      }
+      Matrix<T, ORD> M(*this);
+      for (size_t i = 0; i < n; ++i) 
+        {
+            if (M(i, i) == 0) {
+                size_t p = i+1;
+                while (M(p, i) == 0) {
+                    ++p;
+                }
+                I.swapRows(i, p);
+                M.swapRows(i, p);
+            }
+            I.Row(i)=(1.0/M(i,i))*I.Row(i);
+            M.Row(i)=(1.0/M(i,i))*M.Row(i);
+            for (size_t k = 0; k < n; ++k) 
+            { 
+                if (k != i) {
+                  I.Row(k)=(-M(k,i))*I.Row(i)+I.Row(k);
+                  M.Row(k)=(-M(k,i))*M.Row(i)+M.Row(k);
+                } 
+            }
+        }
+        return I;
     }
 
   };

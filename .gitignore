@@ -14,4 +14,4 @@
 *.bin
 *.a
 build/
-idea/
+.idea/

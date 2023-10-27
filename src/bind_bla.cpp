@@ -126,6 +126,25 @@ PYBIND11_MODULE(bla, m) {
         return Vector<double>(self*other);
         })  
 
+
+      //pickling support
+      .def(py::pickle(
+        [](Matrix<double,RowMajor> & self) { // __getstate__
+            /* return a tuple that fully encodes the state of the object */
+          return py::make_tuple(self.Height(),
+                                self.Width(),
+                                py::bytes((char*)(void*)&self(0,0), self.Height()*self.Width()*sizeof(double)));
+        },
+        [](py::tuple t) { // __setstate__
+          if (t.size() != 3)
+            throw std::runtime_error("should be a 3-tuple!");
+
+          Matrix<double,RowMajor> m(t[0].cast<size_t>(),t[1].cast<size_t>());
+          py::bytes mem = t[2].cast<py::bytes>();
+          std::memcpy(&m(0,0), PYBIND11_BYTES_AS_STRING(mem.ptr()), m.Height()*m.Width()*sizeof(double));
+          return m;
+        }))
+
       
 
     ;

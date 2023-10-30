@@ -2,5 +2,6 @@ _skbuild/
 ASCsoft.egg-info/
 build/
 setup.py
-.vscode/settings.json
+.vscode/
 pickle.txt
+tests/vc140.pdb

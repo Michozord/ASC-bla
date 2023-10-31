@@ -65,13 +65,15 @@ default is row-major. Supported are following basic operations: scalar-matrix mu
 matrix addition, matrix-vector multiplication and matrix-matrix multiplication.
 
 .. code-block:: cpp
+   
    Matrix<double,RowMajor> m1(5,3), m2(5,3), m3(3,3);
    Vector<double> v(5);
-   for (int i = 0; i < m1.Height(); i++)
-     for (int j = 0; j < m1.Width(); j++)
-       m1(i,j) = i+j;
-       m2(i,j) = i-j;
-   
+   for (int i = 0; i < m1.Height(); i++){
+      for (int j = 0; j < m1.Width(); j++){
+         m1(i,j) = i+j;
+         m2(i,j) = i-j;
+      }
+   }
    m3 = 3.7;
 
    for (int i = 0; i < v.Size(); i++)
@@ -100,8 +102,9 @@ or more rows or columns:
 You can also get transpose matrix and for square matrices you can compute its inverse: 
 
 .. code-block:: cpp
-   Matrix transposed = m1.Transpose();
-   Matrix inverse = m3.invert();
+   
+      Matrix transposed = m1.Transpose();
+      Matrix inverse = m3.invert();
    
 .. toctree::
    :maxdepth: 2

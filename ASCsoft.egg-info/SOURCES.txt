@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+ASCsoft/__init__.py
+ASCsoft.egg-info/PKG-INFO
+ASCsoft.egg-info/SOURCES.txt
+ASCsoft.egg-info/dependency_links.txt
+ASCsoft.egg-info/not-zip-safe
+ASCsoft.egg-info/top_level.txt
+_skbuild/win-amd64-3.8/cmake-install/ASCsoft/__init__.py
+_skbuild/win-amd64-3.8/cmake-install/ASCsoft/bla.cp38-win_amd64.pyd
+_skbuild/win-amd64-3.8/cmake-install/ASCsoft/include/vector.h

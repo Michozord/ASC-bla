@@ -1,0 +1,2 @@
+C:/ESC/ASC-bla/_skbuild/win-amd64-3.8/cmake-install/ASCsoft/bla.cp38-win_amd64.pyd
+C:/ESC/ASC-bla/_skbuild/win-amd64-3.8/cmake-install/ASCsoft/include/vector.h

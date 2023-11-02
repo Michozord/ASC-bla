@@ -1,0 +1,11 @@
+# ninja log v5
+11	1179	7203131730093823	CMakeFiles/test_vector.dir/tests/test_vector.cc.obj	5ba343502a3a9b44
+1182	1887	7203131735991043	test_vector.exe	bf45646084da0c77
+21	5022	7203131768556478	CMakeFiles/bla.dir/src/bind_bla.cpp.obj	b3f797f5c103a14d
+5046	11683	7203131833332626	bla.cp38-win_amd64.pyd	21720520e8974ada
+11683	11813	0	CMakeFiles/install.util	d98e3433b478d115
+12	1633	7203139366851970	CMakeFiles/test_vector.dir/tests/test_vector.cc.obj	5ba343502a3a9b44
+1634	2136	7203139370726298	test_vector.exe	b28f00bb3bd669f0
+25	5997	7203139410494230	CMakeFiles/bla.dir/src/bind_bla.cpp.obj	b3f797f5c103a14d
+5997	13097	7203139480246487	bla.cp38-win_amd64.pyd	9e5d59fb300c0b4c
+13097	13223	0	CMakeFiles/install.util	8c658a9a278afec8

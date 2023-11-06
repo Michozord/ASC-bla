@@ -73,6 +73,10 @@ namespace ASC_bla
             return data_[i * dist_ + j];
         } 
      }
+
+     T* Data() {
+      return data_;
+    }
       
   };
 

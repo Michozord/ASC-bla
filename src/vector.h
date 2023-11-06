@@ -52,6 +52,10 @@ namespace ASC_bla
     auto Slice(size_t first, size_t slice) const {
       return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
     }
+
+    T* Data() {
+      return data_;
+    }
       
   };
   

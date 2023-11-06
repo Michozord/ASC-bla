@@ -13,9 +13,20 @@ namespace py = pybind11;
 PYBIND11_MODULE(bla, m) {
     m.doc() = "Basic linear algebra module"; // optional module docstring
     
-    py::class_<Vector<double>> (m, "Vector")
+     py::class_<Vector<double>> (m, "Vector", py::buffer_protocol())
       .def(py::init<size_t>(),
            py::arg("size"), "create vector of given size")
+
+      .def_buffer([](Vector<double> &m) -> py::buffer_info {
+        return py::buffer_info(
+            m.Data(),                               /* Pointer to buffer */
+            sizeof(double),                          /* Size of one scalar */
+            py::format_descriptor<double>::format(), /* Python struct-style format descriptor */
+            1,                                      /* Number of dimensions */
+            { m.Size() },                 /* Buffer dimensions */
+            { sizeof(double) }            /* Strides (in bytes) for each index */ 
+        );
+      })
       .def("__len__", &Vector<double>::Size,
            "return size of vector")
       
@@ -65,9 +76,21 @@ PYBIND11_MODULE(bla, m) {
     ;
 
     //Matrix binding
-    py::class_<Matrix<double,ASC_bla::RowMajor>> (m, "Matrix")
+    py::class_<Matrix<double,ASC_bla::RowMajor>> (m, "Matrix", py::buffer_protocol())
       .def(py::init<size_t,size_t>(),
            py::arg("height"), py::arg("width"))
+      
+      .def_buffer([](Matrix<double,ASC_bla::RowMajor> &m) -> py::buffer_info {
+        return py::buffer_info(
+            m.Data(),                               /* Pointer to buffer */
+            sizeof(double),                          /* Size of one scalar */
+            py::format_descriptor<double>::format(), /* Python struct-style format descriptor */
+            2,                                      /* Number of dimensions */
+            { m.Height(), m.Width() },                 /* Buffer dimensions */
+            { sizeof(double) * m.Width(),             /* Strides (in bytes) for each index */
+              sizeof(double) }
+        );
+      })
       
       //basic properties
       .def_property_readonly("shape",[](const Matrix<double, RowMajor>& self) {

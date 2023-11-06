@@ -1,5 +1,6 @@
 from ASCsoft.bla import *
 import pickle
+import numpy as np
 m =3
 n =4
 x=Matrix(m,n)
@@ -29,3 +30,8 @@ f2 = open("pickle.txt", 'rb')
 val = pickle.load(f2)
 print (val)
 print (val[2])
+
+#test conversion to numpy
+print("Testing conversion to numpy arrays")
+print(np.asarray(x))
+print(np.asarray(v))

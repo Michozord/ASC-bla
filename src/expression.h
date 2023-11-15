@@ -110,6 +110,9 @@ namespace ASC_bla
     auto operator() (size_t i, size_t j) const {
       assert(a_.Width() == b_.Height());
       auto res = a_(0, 0);
+      /*maybe we should rewrite this as follows:
+      decltype (a_(0,0)*b_(0,0)) res = 0;
+      this way we can also multiply e.g. a complex with a double matrix*/
       res = 0;
       for (size_t k = 0; k < a_.Width(); k++) {
           res += a_(i, k) * b_(k, j);

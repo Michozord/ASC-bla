@@ -112,9 +112,31 @@ You can also get transpose matrix and for square matrices you can compute its in
 
 
 
-Indices and tables
+Python bindings
 ==================
+You can use ASC-bla objects in python via pybind. First, you have to install this library via pip:
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. code-block::
+   pip install git+https://github.com/Michozord/ASC-bla.git
+
+Now you can import classes Vector and Matrix in your python code:
+
+.. code-block::
+   from ASCsoft.bla import Vector
+   from ASCsoft.bla import Matrix
+
+You can use Vector and Matrix objects with basic arithmetical operations:
+
+.. code-block::
+   v = Vector(3)
+   a = Matrix(4, 4)
+   b = Matrix(4, 3)
+   w = b*v
+   c = a * b 
+
+It is also possible to convert ASC-bla matrices to numpy arrays:
+
+.. code-block::
+   import numpy as np
+   numpy_a = np.asarray(a)
+

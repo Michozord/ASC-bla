@@ -1,0 +1,3 @@
+[submodule "ASC-HCP"]
+	path = ASC-HCP
+	url = https://github.com/Michozord/ASC-HPC.git

@@ -15,9 +15,11 @@ find_package(pybind11 CONFIG REQUIRED)
 
 
 add_executable (test_vector tests/test_vector.cc)
-
+add_executable(test_matrix tests/test_matrix.cc)
 
 find_package(LAPACK REQUIRED)
+add_executable(test_benchmark tests/benchmark_lapack.cc)
+target_link_libraries (test_benchmark PUBLIC ${LAPACK_LIBRARIES})
 add_executable (test_lapack tests/test_lapack.cc)
 target_link_libraries (test_lapack PUBLIC ${LAPACK_LIBRARIES})
 

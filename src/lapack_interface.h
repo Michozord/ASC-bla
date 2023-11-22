@@ -5,9 +5,9 @@
 #include <string>
 
 #include "vector.h"
-
-
-
+#include "matrix.h"
+#include <vector>
+#include <algorithm>
 #include <complex>
 
 typedef int integer;
@@ -26,7 +26,7 @@ typedef int L_fp;  // ?
 
 
 extern "C" {
-#include <clapack.h>
+#include "clapack.h"
 }
 
 
@@ -48,10 +48,7 @@ namespace ASC_bla
     integer n = x.Size();
     integer incx = x.Dist();
     integer incy = y.Dist();
-    int err = 
-      daxpy_ (&n, &alpha, &x(0),  &incx, &y(0), &incy);
-    if (err != 0)
-      std::cerr << "daxpy returned errcode " << err << std::endl;
+    daxpy_ (&n, &alpha, &x(0),  &incx, &y(0), &incy);
   }
   
   
@@ -82,24 +79,22 @@ namespace ASC_bla
   
     double alpha = 1.0;
     double beta = 0;
-    integer lda = std::max(a.Dist(), 1ul);
-    integer ldb = std::max(b.Dist(), 1ul);
-    integer ldc = std::max(c.Dist(), 1ul);
+    integer lda = std::max((unsigned long)a.Dist(), 1ul);
+    integer ldb = std::max((unsigned long)b.Dist(), 1ul);
+    integer ldc = std::max((unsigned long)c.Dist(), 1ul);
 
-    int err =
-      dgemm_ (&transa_, &transb_, &n, &m, &k, &alpha, 
-              a.Data(), &lda, b.Data(), &ldb, &beta, c.Data(), &ldc);
+    
+    dgemm_ (&transa_, &transb_, &n, &m, &k, &alpha, 
+            a.Data(), &lda, b.Data(), &ldb, &beta, c.Data(), &ldc);
 
-    if (err != 0)
-      throw std::runtime_error(std::string("MultMatMat got error "+std::to_string(err)));
   }
                        
   template <ORDERING OA, ORDERING OB>
-  int MultMatMatLapack (MatrixView<double, OA> a,
+  void MultMatMatLapack (MatrixView<double, OA> a,
                         MatrixView<double, OB> b,
                         MatrixView<double, RowMajor> c)
   {
-    MultMatMatLapack (Trans(b), Trans(a), Trans(c));
+    MultMatMatLapack (b.Transpose(), a.Transpose(), c.Transpose());
   }
 
 

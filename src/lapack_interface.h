@@ -157,11 +157,47 @@ namespace ASC_bla
       return std::move(a);      
     }
 
-    /*
-      Matrix<double,ORD> LFactor() const { ... }
-      Matrix<double,ORD> UFactor() const { ... }
-      Matrix<double,ORD> PFactor() const { ... }
-    */
+    
+      Matrix<double,ORD> LFactor() const { 
+        Matrix<double, ORD> M(a);
+        for(size_t i=0; i<M.Height();i++){
+          for(size_t j=i; j<M.Width(); j++){
+              if(i==j) M(i,j)=1;
+              else M(i,j)=0.0;
+          }
+        }
+        return std::move(M);
+       }
+      
+      Matrix<double,ORD> UFactor() const { 
+        Matrix<double, ORD> M(a);
+        for(size_t j=0; j<M.Width();j++){
+          for(size_t i=j+1; i<M.Height(); i++){
+              M(i,j)=0.0;
+          }
+        }
+        return std::move(M);
+       }
+      
+      Matrix<double,ORD> PFactor() const {
+        Matrix<double, ORD> M(a.Height(),a.Width());
+        for (size_t i = 0; i < a.Height(); i++)
+        {
+          for (size_t j = 0; j < a.Width(); j++)
+          {
+            M(i,j)=(i==j) ? 1 : 0;
+          }
+        }
+        //the permutation vector tells us that the i-th (index starting from 1) row WAS swapped with the ipiv[i] row. So we have to swap in reversed order!
+        //the code is not very efficient, because we copy/move a lot of 0 entries for nothing
+        int i=a.Dist()-1;
+        while(i>=0){
+          M.swapRows(i,ipiv[i]-1);
+          i--;
+        }
+        return std::move(M);
+      }
+    
   };
   
 }

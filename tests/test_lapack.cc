@@ -55,6 +55,22 @@ int main()
   MultMatMatLapack(a,b,c);
   std::cout << "a*b = \n" << c << std::endl;
   std::cout << "a+b = \n" << a+b << std::endl;
+
+  //test LU-class
+  ASC_bla::Matrix<double,ASC_bla::ColMajor> M(3, 3);
+  M(0,0)=1; M(0,1)=2; M(0,2)=4;
+  M(1,0)=2; M(1,1)=3; M(1,2)=8;
+  M(2,0)=-1; M(2,1)=-3; M(2,2)=-1;
+  std::cout <<"Our Matrix M is: \n"<< M << std::endl;
+
+  ASC_bla::Matrix<double,ASC_bla::ColMajor> L = LapackLU(M).LFactor();  
+  ASC_bla::Matrix<double,ASC_bla::ColMajor> U = LapackLU(M).UFactor(); 
+  ASC_bla::Matrix<double,ASC_bla::ColMajor> P = LapackLU(M).PFactor(); 
+  std::cout <<"The L-Faktor is: \n"<< L << std::endl;
+  std::cout <<"The U-Faktor is: \n"<< U << std::endl;
+  std::cout <<"The P-Faktor is: \n"<< P << std::endl;
+  std::cout <<"L*U=\n"<<(L*U)<<std::endl;
+  std::cout <<"P*L*U=\n"<<P*(L*U)<<std::endl;
 }
 
   

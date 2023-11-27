@@ -6,6 +6,8 @@
 #include "expression.h"
 #include "vector.h"
 #include <utility>
+#include "../ASC-HCP/src/simd.h"
+#include "../ASC-HCP/src/simd_avx.h"
 
 namespace ASC_bla
 {   //forward declaration of Vector class
@@ -244,14 +246,92 @@ namespace ASC_bla
   };
 
 
+  template <typename TA, typename TB, ORDERING ORD>
+  auto operator* (const Matrix<TA, ORD> & a, const Matrix<TB, ORD> & b)
+  {
+    assert(a.Width() == b.Height());
+    const size_t SW = 4;
+    Matrix<TA, ORD> c(a.Height(), b.Width());
+    size_t i;
+    for(i=0; i<a.Height()-3; i+=SW){ 
+      size_t j;
+      for(j=0; j<b.Width()-3; j+=SW){
+        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
+        ASC_HPC::SIMD<TA, SW> simd_sum1(0.);
+        ASC_HPC::SIMD<TA, SW> simd_sum2(0.);
+        ASC_HPC::SIMD<TA, SW> simd_sum3(0.);
+        for(size_t k=0; k<a.Width(); k++){
+          ASC_HPC::SIMD<TA, SW> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, SW> simd_temp1(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, SW> simd_temp2(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, SW> simd_temp3(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          simd_sum0 += b(k, j) * simd_temp0;
+          simd_sum1 += b(k, j+1) * simd_temp1;
+          simd_sum2 += b(k, j+2) * simd_temp2;
+          simd_sum3 += b(k, j+3) * simd_temp3;
+        }
+        c(i,j) = simd_sum0.Val()[0];
+        c(i+1,j) = simd_sum0.Val()[1];
+        c(i+2,j) = simd_sum0.Val()[2];
+        c(i+3,j) = simd_sum0.Val()[3];
+        c(i,j+1) = simd_sum1.Val()[0];
+        c(i+1,j+1) = simd_sum1.Val()[1];
+        c(i+2,j+1) = simd_sum1.Val()[2];
+        c(i+3,j+1) = simd_sum1.Val()[3];
+        c(i,j+2) = simd_sum2.Val()[0];
+        c(i+1,j+2) = simd_sum2.Val()[1];
+        c(i+2,j+2) = simd_sum2.Val()[2];
+        c(i+3,j+2) = simd_sum2.Val()[3];
+        c(i,j+3) = simd_sum3.Val()[0];
+        c(i+1,j+3) = simd_sum3.Val()[1];
+        c(i+2,j+3) = simd_sum3.Val()[2];
+        c(i+3,j+3) = simd_sum3.Val()[3];
+      }
+      for (j; j<b.Width(); j++){
+        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
+        for (size_t k=0; k<a.Width(); k++){
+          ASC_HPC::SIMD<TA, SW> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          simd_sum0 += b(k, j) * simd_temp0;
+        }
+        c(i,j) = simd_sum0.Val()[0];
+        c(i+1,j) = simd_sum0.Val()[1];
+        c(i+2,j) = simd_sum0.Val()[2];
+        c(i+3,j) = simd_sum0.Val()[3];
+      }
+    }
+    for (i; i<a.Height(); i++){
+      size_t j = 0;
+      for (j; j<b.Width()-3; j+=SW){
+        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
+        for(size_t k=0; k<a.Width(); k++){
+          ASC_HPC::SIMD<TA, SW> simd_temp0(b(k, j), b(k, j+1), b(k, j+2), b(k, j+3));
+          simd_sum0 += a(i, k) * simd_temp0;
+        }
+        c(i,j) = simd_sum0.Val()[0];
+        c(i,j+1) = simd_sum0.Val()[1];
+        c(i,j+2) = simd_sum0.Val()[2];
+        c(i,j+3) = simd_sum0.Val()[3];
+      }
+      for (j; j<b.Width(); j++){
+        TA sum = 0;
+        for (size_t k=0; k<a.Width(); k++){
+          sum += a(i,k)*b(k,j);
+        }
+        c(i,j)=sum;
+      }
+    }
+    return c;
+  }
+
+
   template <typename ...Args>
   std::ostream & operator<< (std::ostream & ost, const MatrixView<Args...> & m)
   {
-    for (size_t i = 0; i < m.Rows(); i++){
+    for (size_t i = 0; i < m.Height(); i++){
             for(size_t j = 0; j < m.Cols() - 1; j++){
                 ost << m(i, j) << ", ";
             }
-            ost << m(i, m.Cols() - 1) << "\n";
+            ost << m(i, m.Width() - 1) << "\n";
         }
         return ost;
   }

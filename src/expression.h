@@ -99,36 +99,36 @@ namespace ASC_bla
     return SumMatExpr(a.Upcast(), b.Upcast());
   }
 
-  template <typename TA, typename TB>
-  class MatMatExpr : public MatExpr<MatMatExpr<TA,TB>>
-  {
-    TA a_;
-    TB b_;
-  public:
-    MatMatExpr (TA a, TB b) : a_(a), b_(b) { }
 
-    auto operator() (size_t i, size_t j) const {
-      assert(a_.Width() == b_.Height());
-      auto res = a_(0, 0);
-      /*maybe we should rewrite this as follows:
-      decltype (a_(0,0)*b_(0,0)) res = 0;
-      this way we can also multiply e.g. a complex with a double matrix*/
-      res = 0;
-      for (size_t k = 0; k < a_.Width(); k++) {
-          res += a_(i, k) * b_(k, j);
-      }
-      return res;
-     }
-    size_t Height() const { return a_.Height(); }      
-    size_t Width() const { return b_.Width(); }      
-
-  };
+  //Probably obsolete: 
   
-  template <typename TA, typename TB>
-  auto operator* (const MatExpr<TA> & a, const MatExpr<TB> & b)
-  {
-    return MatMatExpr(a.Upcast(), b.Upcast());
-  }
+  // template <typename TA, typename TB>
+  // class MatMatExpr : public MatExpr<MatMatExpr<TA,TB>>
+  // {
+  //   TA a_;
+  //   TB b_;
+  // public:
+  //   MatMatExpr (TA a, TB b) : a_(a), b_(b) { }
+
+  //   auto operator() (size_t i, size_t j) const {
+  //     assert(a_.Width() == b_.Height());
+  //     decltype (a_(0,0)*b_(0,0)) res = 0;
+  //     res = 0;
+  //     for (size_t k = 0; k < a_.Width(); k++) {
+  //         res += a_(i, k) * b_(k, j);
+  //     }
+  //     return res;
+  //    }
+  //   size_t Height() const { return a_.Height(); }      
+  //   size_t Width() const { return b_.Width(); }      
+
+  // };
+  
+  // template <typename TA, typename TB>
+  // auto operator* (const MatExpr<TA> & a, const MatExpr<TB> & b)
+  // {
+  //   return MatMatExpr(a.Upcast(), b.Upcast());
+  // }
 
   template <typename TMAT, typename TVEC>
   class MatVecExpr : public VecExpr<MatVecExpr<TMAT,TVEC>>

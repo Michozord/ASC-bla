@@ -4,6 +4,25 @@
 #include <utility>  //for std::move
 namespace bla = ASC_bla;
 
+void test_mat_mult(){
+    size_t m = 13;
+    size_t n = 14;
+    bla::Matrix<double,bla::ColMajor> x(m, n);
+    bla::Matrix<double,bla::ColMajor> y(n, m);
+    size_t k = 0;
+    for (size_t i = 0; i < m; i++){
+        for (size_t j = 0; j < n; j++){
+            if (i==j){ x(i, j) = 1;}else{x(i,j)=0;}
+            y(j,i) = k;
+            k++; 
+        }
+    }
+    std::cout << "x = \n" << x<<std::endl<<"y = \n"<<y<<std::endl;
+    std::cout << "x*y = \n" << x*y << std::endl;
+
+}
+
+
 int main()
 {
     size_t m = 4;
@@ -71,4 +90,7 @@ int main()
     M3(2, 0) = 0; M3(2, 1) = 1; M3(2, 2) = 0;
     std::cout << "M3 = \n"<< M3 << '\n';
     std::cout << "M3^(-1) = \n" << M3.invert() << '\n';
+    test_mat_mult();
 }
+
+

@@ -61,26 +61,50 @@ You can create vectors and compute with vectors like:
 
 
 For matrices you can choose between row-major (`RowMajor`) or column-major (`ColMajor`) storage,
-default is row-major.
+default is row-major. Supported are following basic operations: scalar-matrix multiplication, 
+matrix addition, matrix-vector multiplication and matrix-matrix multiplication.
 
-..  code-block:: cpp
-
-   Matrix<double,RowMajor> m1(5,3), m2(3,3);
-   for (int i = 0; i < m1.Height(); i++)
-     for (int j = 0; j < m1.Width(); j++)
-       m1(i,j) = i+j;
-   m2 = 3.7;
-   Matrix product = m1 * m2;
+.. code-block:: cpp
    
-You can extract a rows or a columns from a matrix:
+   Matrix<double,RowMajor> m1(5,3), m2(5,3), m3(3,3);
+   Vector<double> v(5);
+   for (int i = 0; i < m1.Height(); i++){
+      for (int j = 0; j < m1.Width(); j++){
+         m1(i,j) = i+j;
+         m2(i,j) = i-j;
+      }
+   }
+   m3 = 3.7;
+
+   for (int i = 0; i < v.Size(); i++)
+      v(i) = i;
+
+   Matrix sum = 2 * m1 + m2;
+   Vector mat_vec_product = m1 * v;
+   Matrix mat_mat_product = m1 * m3;
+
+
+You can extract a single row or a single column from a matrix:
 
 ..  code-block:: cpp
 
-   Vector col1 = product.Col(1);
+   Vector col1 = mat_mat_product.Col(1);
+   Vector row2 = mat_mat_product.Row(2);
 
 
-some changes ...  
+or more rows or columns:
 
+.. code-block:: cpp
+
+   Matrix cols = mat_mat_product.Cols(1,3);     // columns 1 and 2, column 3 is excluded
+   Matrix rows = mat_mat_product.Rows(0,3);     // rows 0, 1 and 2, row 3 is excluded
+
+You can also get transpose matrix and for square matrices you can compute its inverse: 
+
+.. code-block:: cpp
+   
+      Matrix transposed = m1.Transpose();
+      Matrix inverse = m3.invert();
    
 .. toctree::
    :maxdepth: 2
@@ -88,9 +112,31 @@ some changes ...
 
 
 
-Indices and tables
+Python bindings
 ==================
+You can use ASC-bla objects in python via pybind. First, you have to install this library via pip:
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. code-block::
+   pip install git+https://github.com/Michozord/ASC-bla.git
+
+Now you can import classes Vector and Matrix in your python code:
+
+.. code-block::
+   from ASCsoft.bla import Vector
+   from ASCsoft.bla import Matrix
+
+You can use Vector and Matrix objects with basic arithmetical operations:
+
+.. code-block::
+   v = Vector(3)
+   a = Matrix(4, 4)
+   b = Matrix(4, 3)
+   w = b*v
+   c = a * b 
+
+It is also possible to convert ASC-bla matrices to numpy arrays:
+
+.. code-block::
+   import numpy as np
+   numpy_a = np.asarray(a)
+

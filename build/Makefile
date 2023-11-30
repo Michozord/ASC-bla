@@ -116,17 +116,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_vector
+# Target rules for targets named test_matrix_2
 
 # Build rule for target.
-test_vector: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_vector
-.PHONY : test_vector
+test_matrix_2: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_matrix_2
+.PHONY : test_matrix_2
 
 # fast build rule for target.
-test_vector/fast:
-	$(MAKE) $(MAKESILENT) -f tests\CMakeFiles\test_vector.dir\build.make tests/CMakeFiles/test_vector.dir/build
-.PHONY : test_vector/fast
+test_matrix_2/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_matrix_2.dir\build.make CMakeFiles/test_matrix_2.dir/build
+.PHONY : test_matrix_2/fast
+
+tests/test_matrix_2.obj: tests/test_matrix_2.cc.obj
+.PHONY : tests/test_matrix_2.obj
+
+# target to build an object file
+tests/test_matrix_2.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_matrix_2.dir\build.make CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.obj
+.PHONY : tests/test_matrix_2.cc.obj
+
+tests/test_matrix_2.i: tests/test_matrix_2.cc.i
+.PHONY : tests/test_matrix_2.i
+
+# target to preprocess a source file
+tests/test_matrix_2.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_matrix_2.dir\build.make CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.i
+.PHONY : tests/test_matrix_2.cc.i
+
+tests/test_matrix_2.s: tests/test_matrix_2.cc.s
+.PHONY : tests/test_matrix_2.s
+
+# target to generate assembly for a file
+tests/test_matrix_2.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_matrix_2.dir\build.make CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.s
+.PHONY : tests/test_matrix_2.cc.s
 
 # Help Target
 help:
@@ -136,7 +160,10 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... test_vector
+	@echo ... test_matrix_2
+	@echo ... tests/test_matrix_2.obj
+	@echo ... tests/test_matrix_2.i
+	@echo ... tests/test_matrix_2.s
 .PHONY : help
 
 

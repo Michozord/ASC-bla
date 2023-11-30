@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'ASC-bla'
-copyright = '2023, J. Schoeberl'
+copyright = '2023, J. Schoeberl, T. Steinkellner, M. Trojanowski'
 author = 'J. Schoeberl'
 
 

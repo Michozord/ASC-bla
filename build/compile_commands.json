@@ -1,7 +1,7 @@
 [
 {
   "directory": "C:/ESC/ASC-bla/build",
-  "command": "C:/MinGW/bin/c++.exe  @CMakeFiles/test_matrix_2.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.obj -c C:/ESC/ASC-bla/tests/test_matrix_2.cc",
+  "command": "C:/MinGW/bin/c++.exe  @CMakeFiles/test_matrix_2.dir/includes_CXX.rsp  -march=native -g -std=gnu++17 -o CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.obj -c C:/ESC/ASC-bla/tests/test_matrix_2.cc",
   "file": "C:/ESC/ASC-bla/tests/test_matrix_2.cc",
   "output": "CMakeFiles/test_matrix_2.dir/tests/test_matrix_2.cc.obj"
 }

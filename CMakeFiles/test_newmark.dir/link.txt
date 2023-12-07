@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\test_newmark.dir/objects.a
+C:\MinGW\bin\ar.exe qc CMakeFiles\test_newmark.dir/objects.a @CMakeFiles\test_newmark.dir\objects1.rsp
+C:\MinGW\bin\c++.exe  -march=native -Wl,--whole-archive CMakeFiles\test_newmark.dir/objects.a -Wl,--no-whole-archive -o test_newmark.exe -Wl,--out-implib,libtest_newmark.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\test_newmark.dir\linkLibs.rsp

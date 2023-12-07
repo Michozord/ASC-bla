@@ -63,6 +63,9 @@ int main()
     std::cout << "v = " << v << std::endl;
     std::cout << "a * v = " << a*v << std::endl;
 
+    //test L2 Norm
+    std::cout<<" ||v|| = "<< v.L2Norm() <<std::endl;
+
     //test Row,Col methods
     std::cout << "b.Row(1) = " << b.Row(1) << std::endl;
     std::cout << "b.Col(3) = " << b.Col(3) << std::endl;

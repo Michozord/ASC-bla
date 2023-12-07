@@ -8,8 +8,8 @@
 #include <utility>
 #include "../ASC-HCP/src/simd.h"
 #include "../ASC-HCP/src/simd_avx.h"
-#include <../ASC-HCP/src/taskmanager.cc>
-#include <../ASC-HCP/src/timer.cc>
+#include "../ASC-HCP/src/taskmanager.cc"
+#include "../ASC-HCP/src/timer.cc"
 #include<functional>
 
 

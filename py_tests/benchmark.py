@@ -2,6 +2,7 @@ import timeit
 #primitve benchmark
 #to do: implement buffer protocol, think how you could effectively measure the time for C++ code separately
 #runtime around 20 sec
+#For later comparison: before adding HPC improvements we had runtime of roughly 1sec for n=1000
 setup10='''
 import random
 from ASCsoft.bla import Matrix

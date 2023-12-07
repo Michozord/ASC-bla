@@ -70,6 +70,9 @@ int main()
     std::cout << "b.Rows(1, 4) = \n" << b.Rows(1, 4) << std::endl;
     std::cout << "b.Rows(1, 4) = \n" << b.Rows(1, 4) << std::endl;
 
+    //test Diag
+    std::cout << "b.Diag() = " << b.Diag() <<std::endl;
+
     //test transpose
     std::cout << "d.Transpose()=\n" << d.Transpose() << std::endl;
     

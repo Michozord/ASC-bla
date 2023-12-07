@@ -103,6 +103,11 @@ namespace ASC_bla
         }
     }
 
+    auto Diag () const {
+        size_t l = (Height() > Width()) ? Width() : Height();
+        return VectorView<T, size_t>(l, dist_+1,data_);   
+    }
+
      T* Data() {
       return data_;
     }

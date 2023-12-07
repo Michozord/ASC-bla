@@ -81,6 +81,28 @@ namespace ASC_bla
         } 
      }
 
+     MatrixView<T, ORD> Rows (size_t first, size_t next) const {
+        assert(0 <= first && first < Height());
+        assert(0 < next && next <= Height());
+        assert(first < next);
+        if(ORD == ORDERING::RowMajor){
+            return MatrixView<T, ORD>(next-first, Width(), dist_, data_+first*Width());
+        } else {
+            return MatrixView<T, ORD>(next-first, Width(), Height(), data_+first);
+        }
+    }
+
+    MatrixView<T, ORD> Cols (size_t first, size_t next) const {
+        assert(0 <= first && first < Width());
+        assert(0 < next && next <= Width());
+        assert(first < next);
+        if(ORD == ORDERING::ColMajor){
+          return MatrixView<T, ORD>(Height(), next-first, dist_, data_+first*Height());
+        } else {
+          return MatrixView<T, ORD>(Height(), next-first, Width(), data_+first);
+        }
+    }
+
      T* Data() {
       return data_;
     }

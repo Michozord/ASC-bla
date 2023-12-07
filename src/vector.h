@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "expression.h"
+#include <cmath>
 
 
 namespace ASC_bla
@@ -77,6 +78,14 @@ namespace ASC_bla
     {
       *this = v;
     }
+    
+    Vector (std::initializer_list<T> list)
+    : VectorView<T> (list.size(), new T[list.size()])
+    {
+    size_t cnt = 0;
+    for (auto val : list)
+    (*this)(cnt++) = val;
+    }
 
     Vector (Vector && v)
       : VectorView<T> (0, nullptr)
@@ -108,6 +117,15 @@ namespace ASC_bla
       for (size_t i = 0; i < size_; i++)
         data_[i] = v2(i);
       return *this;
+    }
+
+    double L2Norm()
+    {
+      double norm = 0;
+      for (size_t i = 0; i<this->Size(); i++){
+        norm += (*this)(i) * (*this)(i);
+      }
+      return pow(norm, 0.5);
     }
     
   };

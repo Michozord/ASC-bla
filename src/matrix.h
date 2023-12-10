@@ -283,70 +283,70 @@ namespace ASC_bla
   {
     assert(a.Width() == b.Height());
     ASC_HPC::StartWorkers(3);
-    const size_t SW = 4;
+    constexpr size_t SW = 4;
     Matrix<TA, ORD> c(a.Height(), b.Width());
     ASC_HPC::RunParallel(a.Height()/SW, [&a, &b, &c, SW] (int i_step, int size)
     { 
       size_t i = i_step * SW;
       ASC_HPC::RunParallel(b.Width()/SW, [&a, &b, &c, i, SW] (int j_step, int size){
         size_t j = j_step * SW;
-        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
-        ASC_HPC::SIMD<TA, SW> simd_sum1(0.);
-        ASC_HPC::SIMD<TA, SW> simd_sum2(0.);
-        ASC_HPC::SIMD<TA, SW> simd_sum3(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum0(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum1(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum2(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum3(0.);
         for(size_t k=0; k<a.Width(); k++){
-          ASC_HPC::SIMD<TA, SW> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
-          ASC_HPC::SIMD<TA, SW> simd_temp1(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
-          ASC_HPC::SIMD<TA, SW> simd_temp2(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
-          ASC_HPC::SIMD<TA, SW> simd_temp3(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, 4> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, 4> simd_temp1(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, 4> simd_temp2(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, 4> simd_temp3(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
           simd_sum0 += b(k, j) * simd_temp0;
           simd_sum1 += b(k, j+1) * simd_temp1;
           simd_sum2 += b(k, j+2) * simd_temp2;
           simd_sum3 += b(k, j+3) * simd_temp3;
         }
-        c(i,j) = simd_sum0.Val()[0];
-        c(i+1,j) = simd_sum0.Val()[1];
-        c(i+2,j) = simd_sum0.Val()[2];
-        c(i+3,j) = simd_sum0.Val()[3];
-        c(i,j+1) = simd_sum1.Val()[0];
-        c(i+1,j+1) = simd_sum1.Val()[1];
-        c(i+2,j+1) = simd_sum1.Val()[2];
-        c(i+3,j+1) = simd_sum1.Val()[3];
-        c(i,j+2) = simd_sum2.Val()[0];
-        c(i+1,j+2) = simd_sum2.Val()[1];
-        c(i+2,j+2) = simd_sum2.Val()[2];
-        c(i+3,j+2) = simd_sum2.Val()[3];
-        c(i,j+3) = simd_sum3.Val()[0];
-        c(i+1,j+3) = simd_sum3.Val()[1];
-        c(i+2,j+3) = simd_sum3.Val()[2];
-        c(i+3,j+3) = simd_sum3.Val()[3];
+        c(i,j) = simd_sum0[0];
+        c(i+1,j) = simd_sum0[1];
+        c(i+2,j) = simd_sum0[2];
+        c(i+3,j) = simd_sum0[3];
+        c(i,j+1) = simd_sum1[0];
+        c(i+1,j+1) = simd_sum1[1];
+        c(i+2,j+1) = simd_sum1[2];
+        c(i+3,j+1) = simd_sum1[3];
+        c(i,j+2) = simd_sum2[0];
+        c(i+1,j+2) = simd_sum2[1];
+        c(i+2,j+2) = simd_sum2[2];
+        c(i+3,j+2) = simd_sum2[3];
+        c(i,j+3) = simd_sum3[0];
+        c(i+1,j+3) = simd_sum3[1];
+        c(i+2,j+3) = simd_sum3[2];
+        c(i+3,j+3) = simd_sum3[3];
       });
       ASC_HPC::RunParallel(b.Width()%SW, [&a, &b, &c, i, SW] (int j_step, int size){
         size_t j = b.Width() - (b.Width()%SW) + j_step;
-        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum0(0.);
         for (size_t k=0; k<a.Width(); k++){
-          ASC_HPC::SIMD<TA, SW> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
+          ASC_HPC::SIMD<TA, 4> simd_temp0(a(i,k), a(i+1,k), a(i+2,k), a(i+3,k));
           simd_sum0 += b(k, j) * simd_temp0;
         }
-        c(i,j) = simd_sum0.Val()[0];
-        c(i+1,j) = simd_sum0.Val()[1];
-        c(i+2,j) = simd_sum0.Val()[2];
-        c(i+3,j) = simd_sum0.Val()[3];
+        c(i,j) = simd_sum0[0];
+        c(i+1,j) = simd_sum0[1];
+        c(i+2,j) = simd_sum0[2];
+        c(i+3,j) = simd_sum0[3];
       });
     });
     ASC_HPC::RunParallel(a.Height()%SW, [&a, &b, &c, SW] (int i_step, int size){
       size_t i = a.Height() - (a.Height()%SW) + i_step;
       size_t j = 0;
       for (j; j<b.Width()-3; j+=SW){
-        ASC_HPC::SIMD<TA, SW> simd_sum0(0.);
+        ASC_HPC::SIMD<TA, 4> simd_sum0(0.);
         for(size_t k=0; k<a.Width(); k++){
-          ASC_HPC::SIMD<TA, SW> simd_temp0(b(k, j), b(k, j+1), b(k, j+2), b(k, j+3));
+          ASC_HPC::SIMD<TA, 4> simd_temp0(b(k, j), b(k, j+1), b(k, j+2), b(k, j+3));
           simd_sum0 += a(i, k) * simd_temp0;
         }
-        c(i,j) = simd_sum0.Val()[0];
-        c(i,j+1) = simd_sum0.Val()[1];
-        c(i,j+2) = simd_sum0.Val()[2];
-        c(i,j+3) = simd_sum0.Val()[3];
+        c(i,j) = simd_sum0[0];
+        c(i,j+1) = simd_sum0[1];
+        c(i,j+2) = simd_sum0[2];
+        c(i,j+3) = simd_sum0[3];
       }
       for (j; j<b.Width(); j++){
         TA sum = 0;

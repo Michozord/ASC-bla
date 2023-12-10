@@ -40,6 +40,12 @@ namespace ASC_bla
         data_[dist_*i] = scal;
       return *this;
     }
+
+    VectorView& operator= (const VectorView & v2) {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] = v2(i);
+      return *this;
+    }
     
     auto View() const { return VectorView(size_, dist_, data_); }
     size_t Size() const { return size_; }

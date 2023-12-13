@@ -337,7 +337,7 @@ namespace ASC_bla
     ASC_HPC::RunParallel(a.Height()%SW, [&a, &b, &c, SW] (int i_step, int size){
       size_t i = a.Height() - (a.Height()%SW) + i_step;
       size_t j = 0;
-      for (j; j<b.Width()-3; j+=SW){
+      for (j; j+3<b.Width(); j+=SW){
         ASC_HPC::SIMD<TA, 4> simd_sum0(0.);
         for(size_t k=0; k<a.Width(); k++){
           ASC_HPC::SIMD<TA, 4> simd_temp0(b(k, j), b(k, j+1), b(k, j+2), b(k, j+3));

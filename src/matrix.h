@@ -264,12 +264,16 @@ namespace ASC_bla
       for (size_t i = 0; i < n; ++i) 
         {
             if (M(i, i) == 0) {
-                size_t p = i+1;
-                while (M(p, i) == 0) {
-                    ++p;
-                }
-                I.swapRows(i, p);
-                M.swapRows(i, p);
+                //size_t p = i+1;
+                size_t p=0;
+                while (M(p,i)==0) {++p;}
+                I.Row(i)=I.Row(i)+I.Row(p);
+                M.Row(i)=M.Row(i)+M.Row(p);
+                //while (M(p, i) == 0) {
+                //    ++p;
+                //}
+                //I.swapRows(i, p);
+                //M.swapRows(i, p);
             }
             I.Row(i)=(1.0/M(i,i))*I.Row(i);
             M.Row(i)=(1.0/M(i,i))*M.Row(i);

@@ -112,6 +112,25 @@ namespace ASC_bla
         }
     }
 
+    auto Col (size_t j) const {
+        assert(0 <= j && j < Width());
+        if constexpr (ORD == ORDERING::ColMajor){
+            return VectorView<T>(Height(), data_ + j*Height());
+        }else{
+            return VectorView<T>(Height(), Width(), data_ + j);
+        }
+    }
+
+    auto Row (size_t i) const {
+        assert(0 <= i && i < Height());
+        if constexpr (ORD == ORDERING::RowMajor){
+            return VectorView<T>(Width(), data_ + i*Width());
+        }else{
+            return VectorView<T, size_t>(Width(), Height(), data_ + i); 
+        }
+        
+    }
+
     auto Diag () const {
         size_t l = (Height() > Width()) ? Width() : Height();
         return VectorView<T, size_t>(l, dist_+1,data_);   

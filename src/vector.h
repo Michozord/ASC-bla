@@ -53,6 +53,7 @@ namespace ASC_bla
     const T & operator()(size_t i) const { return data_[dist_*i]; }
     
     auto Range(size_t first, size_t next) const {
+      assert(first >= 0 && next <= size_);
       return VectorView(next-first, dist_, data_+first*dist_);
     }
 

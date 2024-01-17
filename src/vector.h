@@ -4,14 +4,18 @@
 #include <iostream>
 
 #include "expression.h"
+#include "matrix.h"
 #include <cmath>
 
 
 namespace ASC_bla
 {
 
+  template <typename T, ORDERING ORD> 
+  class Matrix;
+  template <typename T, ORDERING ORD> 
+  class MatrixView;
 
- 
   template <typename T, typename TDIST = std::integral_constant<size_t,1> >
   class VectorView : public VecExpr<VectorView<T,TDIST>>
   {
@@ -59,6 +63,10 @@ namespace ASC_bla
 
     auto Slice(size_t first, size_t slice) const {
       return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
+    }
+
+    auto AsMatrix(size_t height, size_t width) {
+      return MatrixView<T, ColMajor>(height, width, data_);
     }
 
     T* Data() {
